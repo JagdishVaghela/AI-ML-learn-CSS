@@ -68,3 +68,28 @@ plt.plot(train_x, regr.coef_[0][0]*train_x + regr.intercept_[0], '-r')
 plt.xlabel("Engine size")
 plt.ylabel("Emission")
 plt.show() 
+
+
+# Testing the model
+from sklearn.metrics import r2_score 
+
+test_x = np.asanyarray(test[['ENGINESIZE']]) 
+test_y = np.asanyarray(test[['CO2EMISSIONS']])
+test_y_ = regr.predict(test_x) 
+
+print("Mean absolute error: %.2f" % np.mean(np.absolute(test_y_ - test_y)))
+
+print("Residual sum of squares (MSE): %.2f" % np.mean((test_y_ - test_y) ** 2))
+
+print("R2-score: %.2f" % r2_score(test_y, test_y_))
+
+# Example input
+def predict_co2(engine_size):
+    engine_size_array = np.array([[engine_size]])  
+    predicted_co2 = regr.predict(engine_size_array) 
+    return predicted_co2[0][0]  
+
+
+input_engine_size = float(input("Enter the engine size to predict CO2 emissions: "))
+predicted_co2 = predict_co2(input_engine_size)
+print(f"Predicted CO2 emissions for engine size {input_engine_size}: {predicted_co2:.2f}")
